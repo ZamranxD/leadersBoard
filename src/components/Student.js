@@ -8,6 +8,7 @@ export default class Student extends Component {
         this.state = {
             score : this.props.score,
             success : false,
+            failure : false,
         }
     }
 
@@ -19,6 +20,29 @@ export default class Student extends Component {
                 if(this.state.score >= 350) {
                     this.setState({
                         success : true,
+                        failure : false,
+                    })
+                } else if(this.state.score > 340) {
+                    this.setState({
+                        failure : false,
+                    })
+                }
+            }
+        )
+    }
+
+    subtractScore(){
+        this.setState({
+            score : this.state.score -1,
+        },
+            () => {
+                if(this.state.score < 350 && this.state.score >=340) {
+                    this.setState({
+                        success : false,
+                    })
+                } else if(this.state.score < 340) {
+                    this.setState({
+                        failure : true,
                     })
                 }
             }
@@ -28,8 +52,15 @@ export default class Student extends Component {
     render() {
 
         const isSuccess = this.state.success;
+        const isFailure = this.state.failure;
         let text;
-        isSuccess ? text=<span>Success</span> : text = "";
+        if(isSuccess) {
+            text = <span>Success</span>
+        } else if(isFailure) {
+            text = <h6>Failure</h6>
+        } else {
+            text = ''
+        }
 
         return (
             <div className="student">
@@ -37,6 +68,7 @@ export default class Student extends Component {
                     <h2 className="name">
                         {this.props.name}
                         <button className="addScore" onClick={() => this.addScore()} >+</button>
+                        <button className="subtractScore" onClick={() => this.subtractScore()} >-</button>
                     </h2>
                     
                     <p className="univerityName">{this.props.university} {text}</p>
